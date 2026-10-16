@@ -1,12 +1,24 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Login from './components/Auth/Login'
+import Landing from './components/Landing/Landing'
 import EmployeeDashboard from './components/Dashboard/EmployeeDashboard'
 import AdminDashboard from './components/Dashboard/AdminDashboard'
 import { AuthContext } from './context/AuthContext'
 
+const readSession = () => {
+  try {
+    return JSON.parse(localStorage.getItem('LoggedInUser'))
+  } catch {
+    return null
+  }
+}
+
 const App = () => {
-  const [user, setUser] = useState(null)
-  const [loggedInEmployeeId, setLoggedInEmployeeId] = useState(null)
+  const [user, setUser] = useState(() => readSession()?.role ?? null)
+  const [loggedInEmployeeId, setLoggedInEmployeeId] = useState(
+    () => readSession()?.id ?? null
+  )
+  const [view, setView] = useState('landing')
   const authData = useContext(AuthContext)
 
   const handleLogin = (email, password) => {
@@ -34,21 +46,37 @@ const App = () => {
   const handleLogout = () => {
     setUser(null)
     setLoggedInEmployeeId(null)
+    setView('landing')
     localStorage.removeItem('LoggedInUser')
   }
 
   const getLoggedInEmployee = () => {
     if (!authData || !loggedInEmployeeId) return null
-    return authData.employees.find(e => e.id === loggedInEmployeeId)
+    return authData.employees.find(e => e.id === loggedInEmployeeId) ?? null
   }
+
+  // A stale restored session (employee id no longer seeded) must not reach
+  // the dashboard — log out instead of rendering with null data.
+  const employee = user === 'employee' ? getLoggedInEmployee() : null
+  useEffect(() => {
+    if (user === 'employee' && !employee) handleLogout()
+  }, [user, employee])
 
   return (
     <>
-      {!user && <Login handleLogin={handleLogin} />}
+      {!user && view === 'landing' && (
+        <Landing
+          onLoginClick={() => setView('login')}
+          onDemoLogin={handleLogin}
+        />
+      )}
+      {!user && view === 'login' && (
+        <Login handleLogin={handleLogin} onBack={() => setView('landing')} />
+      )}
       {user === 'admin' && <AdminDashboard handleLogout={handleLogout} />}
       {user === 'employee' && (
         <EmployeeDashboard
-          data={getLoggedInEmployee()}
+          data={employee}
           handleLogout={handleLogout}
         />
       )}

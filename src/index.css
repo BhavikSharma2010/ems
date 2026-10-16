@@ -3,7 +3,8 @@
 @tailwind utilities;
 
 body {
-  background-color: #050404;
+  background-color: #05060a;
+  font-family: 'Inter', sans-serif;
 }
 
 #tasklist::-webkit-scrollbar {

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-const Login = ({ handleLogin }) => {
+const Login = ({ handleLogin, onBack }) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
@@ -12,39 +12,50 @@ const Login = ({ handleLogin }) => {
   }
 
   return (
-    <div className='flex h-screen w-screen items-center justify-center bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a]'>
-      <div className='absolute inset-0 overflow-hidden'>
-        <div className='absolute -top-40 -right-40 w-80 h-80 bg-emerald-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20' />
-        <div className='absolute -bottom-40 -left-40 w-80 h-80 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20' />
-        <div className='absolute top-1/2 left-1/2 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20' />
+    <div className='relative flex h-screen w-screen items-center justify-center overflow-hidden bg-ink-950'>
+      <div className='absolute inset-0'>
+        <div className='absolute -top-40 -right-40 h-96 w-96 rounded-full bg-accent-500/15 blur-3xl' />
+        <div className='absolute -bottom-40 -left-40 h-96 w-96 rounded-full bg-gold-500/10 blur-3xl' />
+        <div className='absolute top-1/2 left-1/3 h-72 w-72 rounded-full bg-accent-600/10 blur-3xl' />
       </div>
 
       <div className='relative z-10 w-full max-w-md px-6 py-8'>
-        <div className='text-center mb-8'>
-          <h1 className='text-4xl font-bold text-white mb-2'>Employee MS</h1>
-          <p className='text-gray-300'>Manage tasks efficiently</p>
+        {onBack && (
+          <button
+            onClick={onBack}
+            className='mb-6 text-sm text-gray-400 transition-colors duration-300 hover:text-accent-300'
+          >
+            &larr; Back to home
+          </button>
+        )}
+
+        <div className='mb-8 text-center'>
+          <h1 className='font-display text-4xl font-bold text-white'>
+            EMS
+          </h1>
+          <p className='mt-2 text-gray-400'>Employee Management System</p>
         </div>
 
         <form onSubmit={submitHandler} className='space-y-6'>
           <div className='group'>
-            <label className='block text-sm font-medium text-gray-300 mb-2'>Email</label>
+            <label className='mb-2 block text-sm font-medium text-gray-300'>Email</label>
             <input
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className='w-full px-4 py-3 rounded-lg bg-white/10 border-2 border-emerald-500/30 text-white placeholder-gray-400 outline-none transition-all duration-300 focus:border-emerald-500 focus:bg-white/20 focus:shadow-lg focus:shadow-emerald-500/20'
+              className='w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-white placeholder-gray-500 outline-none backdrop-blur-xl transition-all duration-300 focus:border-accent-400/50 focus:bg-white/[0.07] focus:shadow-lg focus:shadow-accent-500/10'
               type='email'
               placeholder='Enter your email'
             />
           </div>
 
           <div className='group'>
-            <label className='block text-sm font-medium text-gray-300 mb-2'>Password</label>
+            <label className='mb-2 block text-sm font-medium text-gray-300'>Password</label>
             <input
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className='w-full px-4 py-3 rounded-lg bg-white/10 border-2 border-emerald-500/30 text-white placeholder-gray-400 outline-none transition-all duration-300 focus:border-emerald-500 focus:bg-white/20 focus:shadow-lg focus:shadow-emerald-500/20'
+              className='w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-white placeholder-gray-500 outline-none backdrop-blur-xl transition-all duration-300 focus:border-accent-400/50 focus:bg-white/[0.07] focus:shadow-lg focus:shadow-accent-500/10'
               type='password'
               placeholder='Enter password'
             />
@@ -52,25 +63,11 @@ const Login = ({ handleLogin }) => {
 
           <button
             type='submit'
-            className='w-full py-3 px-4 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-semibold rounded-lg hover:from-emerald-600 hover:to-emerald-700 transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-emerald-500/50'
+            className='w-full rounded-xl bg-gradient-to-r from-accent-500 to-accent-600 px-4 py-3 font-semibold text-ink-950 shadow-lg shadow-accent-500/20 transition-all duration-300 hover:scale-[1.02] hover:shadow-accent-400/40 active:scale-95'
           >
-            Login
+            Sign in
           </button>
         </form>
-
-        <div className='mt-8 pt-6 border-t border-gray-600/30'>
-          <p className='text-xs text-gray-400 text-center mb-4'>Demo Credentials</p>
-          <div className='space-y-2 text-xs text-gray-400'>
-            <div className='bg-white/5 p-3 rounded border border-gray-600/20'>
-              <p className='font-semibold text-gray-300'>Admin:</p>
-              <p>admin@example.com / 123</p>
-            </div>
-            <div className='bg-white/5 p-3 rounded border border-gray-600/20'>
-              <p className='font-semibold text-gray-300'>Employee:</p>
-              <p>e@e.com / 123</p>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   )
